@@ -19,7 +19,7 @@ RUN npm install
 CMD [ "node", "index.js" ]
 
 # Exposing server port
-EXPOSE 5000
+EXPOSE 3000
 
 
 

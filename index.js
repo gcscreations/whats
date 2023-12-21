@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
-const port=5000;
+const port=3000;
 const { Client,LocalAuth,MessageMedia } = require('whatsapp-web.js');
 
 const bodyParser = require('body-parser');
 
 const http = require('http');
 const server = http.createServer(app);
-app.use(cors());
+//app.use(cors());
 
 app.use(bodyParser.json());
 
@@ -88,8 +88,8 @@ const io = new Server(server,{
 //   res.send('<h1>Hello world</h1>');
 // });
 
-server.listen(5000, () => {
-  console.log('listening on *:5000');
+server.listen(3000, () => {
+  console.log('listening on *:3000');
 });
 /*app.listen(5001, () => {
     console.log("listening port " + port + "\nurl: http://localhost:" + 5001);
