@@ -12,8 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Cors
-/*
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     /!*
         res.header("Access-Control-Allow-credentials", "true");
     *!/
@@ -24,9 +23,8 @@ app.use((req, res, next) => {
     );*!/
     res.header('Acces-Control-Allow-Methods', "GET,OPTIONS, POST, DELETE, PUT, PATCH");
 
-    //next();
-})
-*/
+    next();
+})*/
 
 app.get('/Hello', (req, res) => {
     res.send('<h1>Hello world</h1>');
@@ -78,6 +76,7 @@ app.get('/sendMessage', async (req, res) => {
 
 });
 const { Server } = require("socket.io");
+const cors = require("cors");
 const io = new Server(server,{
     cors: {
         origin: '*',
@@ -92,9 +91,9 @@ const io = new Server(server,{
 server.listen(5000, () => {
   console.log('listening on *:5000');
 });
-app.listen(5001, () => {
+/*app.listen(5001, () => {
     console.log("listening port " + port + "\nurl: http://localhost:" + 5001);
-});
+});*/
 
 const allsessionsObject = {};
 
