@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port=3000;
+const port=5000;
 const { Client,LocalAuth,MessageMedia } = require('whatsapp-web.js');
 
 const bodyParser = require('body-parser');
@@ -82,8 +82,8 @@ app.use((req, res, next) => {
 //   res.send('<h1>Hello world</h1>');
 // });
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
+server.listen(5000, () => {
+  console.log('listening on *:5000');
 });
 /*app.listen(port, () => {
     console.log("listening port " + port + "\nurl: http://localhost:" + port);
