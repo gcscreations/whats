@@ -12,19 +12,21 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Cors
+/*
 app.use((req, res, next) => {
-    /*
+    /!*
         res.header("Access-Control-Allow-credentials", "true");
-    */
+    *!/
     res.header("Acces-Control-Allow-Origin", "*");
-    /*res.header(
+    /!*res.header(
         "Acces-Control-Allow-Header",
         "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token"
-    );*/
+    );*!/
     res.header('Acces-Control-Allow-Methods', "GET,OPTIONS, POST, DELETE, PUT, PATCH");
 
     //next();
 })
+*/
 
 app.get('/Hello', (req, res) => {
     res.send('<h1>Hello world</h1>');
@@ -90,9 +92,9 @@ const io = new Server(server,{
 server.listen(5000, () => {
   console.log('listening on *:5000');
 });
-/*app.listen(port, () => {
-    console.log("listening port " + port + "\nurl: http://localhost:" + port);
-});*/
+app.listen(5001, () => {
+    console.log("listening port " + port + "\nurl: http://localhost:" + 5001);
+});
 
 const allsessionsObject = {};
 
