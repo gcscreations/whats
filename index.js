@@ -2,14 +2,23 @@ const express = require('express');
 const app = express();
 const port=3000;
 const { Client,LocalAuth,MessageMedia } = require('whatsapp-web.js');
-
+const { Server } = require("socket.io");
 const bodyParser = require('body-parser');
 
 const http = require('http');
 const server = http.createServer(app);
-app.use(cors());
+const cors = require("cors");
+const io = new Server(server,{
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+    },
+})
+server.listen(3000, () => {
+    console.log('listening on *:3000');
+});
 
-app.use(bodyParser.json());
+
 
 // Cors
 /*app.use((req, res, next) => {
@@ -80,26 +89,20 @@ app.get('/sendMessage', async (req, res) => {
 
 
 });
-const { Server } = require("socket.io");
-const cors = require("cors");
-const io = new Server(server,{
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
-    },
-})
+
+
 
 // app.get('/', (req, res) => {
 //   res.send('<h1>Hello world</h1>');
 // });
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
-});
+
+
 /*app.listen(5001, () => {
     console.log("listening port " + port + "\nurl: http://localhost:" + 5001);
 });*/
-
+app.use(bodyParser.json());
+app.use(cors());
 const allsessionsObject = {};
 
 /* const client = new Client({
