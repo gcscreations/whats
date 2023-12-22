@@ -42,7 +42,7 @@ RUN apt-get update \
 #    && chown -R pptruser:pptruser /package-lock.json
 
 # Run everything after as non-privileged user.
-USER pptruser
+
 
 CMD ["google-chrome-stable"]
 # Copying all the files in our project
