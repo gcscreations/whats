@@ -127,6 +127,7 @@ const createWhatsappSession = async (id,socket) => {
     let client = new Client({
         puppeteer:{
             headless:true,
+            args: ["--no-sandbox"],
         },
         authStrategy: new LocalAuth(
             {
