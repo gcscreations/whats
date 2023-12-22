@@ -25,7 +25,12 @@ app.use(bodyParser.json());
 
     next();
 })*/
-
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+app.get('/jquery', (req, res) => {
+    res.sendFile(__dirname + '/public/jquery.min.js');
+});
 app.get('/Hello', (req, res) => {
     res.send('<h1>Hello world</h1>');
 });
@@ -34,7 +39,7 @@ app.get('/sendMessage', async (req, res) => {
     const number = req.query.number;
     const message = req.query.message;
     const mediaPath = req.query.mediaPath;
-    console.log(id,number)
+    console.log(id,number,message,mediaPath)
     //selva(to,message)
     //const { id, number, message,mediaPath } = data;
     const client = allsessionsObject[id];
@@ -192,7 +197,11 @@ io.on('connection', (socket) => {
     socket.emit("Hello From the server");
   });
   socket.on('createSession', (data) => {
-    console.log('creating session for a user', data);
+      let count=0;
+      count++;
+      console.log('creating session for a user count', count);
+
+      console.log('creating session for a user', data);
     const { id } = data;
     createWhatsappSession(id, socket)
       .then(() => {
@@ -208,10 +217,11 @@ io.on('connection', (socket) => {
 
 socket.on('getAllChats',async (data)=>{
     console.log('getting all chats',data);
-    const {id} = data;
+    /*const {id} = data;
     const client = allsessionsObject[id];
-    const chats = await client.getChats();
-    socket.emit('allChats',{chats});
+    const chats = await client.getChats();*/
+    //socket.emit('allChats',{chats});
+    socket.emit('allChats',{data});
 })
 
 socket.on('sendMessage', async (data) => {
