@@ -8,16 +8,13 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const server = http.createServer(app);
 const cors = require("cors");
-const io = new Server(server,{
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
-    },
-})
+const io = new Server(server)
 server.listen(3000, () => {
     console.log('listening on *:3000');
 });
-
+app.listen(5001, () => {
+    console.log("listening port " + port + "\nurl: http://localhost:" + 5001);
+});
 
 
 // Cors
@@ -98,9 +95,7 @@ app.get('/sendMessage', async (req, res) => {
 
 
 
-/*app.listen(5001, () => {
-    console.log("listening port " + port + "\nurl: http://localhost:" + 5001);
-});*/
+
 app.use(bodyParser.json());
 app.use(cors());
 const allsessionsObject = {};
