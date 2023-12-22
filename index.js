@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const http = require('http');
 const server = http.createServer(app);
-//app.use(cors());
+app.use(cors());
 
 app.use(bodyParser.json());
 
