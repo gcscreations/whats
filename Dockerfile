@@ -1,5 +1,5 @@
 # Fetching the minified node image on apline linux
-FROM node:latest
+FROM node:16
 
 # Declaring env
 ENV NODE_ENV development
