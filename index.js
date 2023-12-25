@@ -156,7 +156,7 @@ const getWhatsappSession = async (id,socket) => {
     console.log(id);
     const client = new Client({
         puppeteer: {
-            headless: false,
+            headless: true,
         },
         authStrategy: new RemoteAuth({
             clientId: id,
