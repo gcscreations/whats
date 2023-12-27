@@ -4,6 +4,11 @@ const port=3000;
 const { Client,LocalAuth,MessageMedia ,RemoteAuth} = require('whatsapp-web.js');
 const mongoose = require('mongoose');
 const { MongoStore } = require('wwebjs-mongo');
+const fs = require('fs');
+const path = require('path');
+const directory = './.newDirs/sankari/sanakri';
+const dirPath = path.join(__dirname, directory);
+
 let store;
 const bodyParser = require('body-parser');
 const MONGODB_URI="mongodb+srv://selvapandigamedev95:Z7Ts6Q1R8ABF0WFD@cluster0.3vdhym6.mongodb.net/"
@@ -18,6 +23,14 @@ app.get('/sendMessage', async (req, res) => {
     const message = req.query.message;
     const mediaPath = req.query.mediaPath;
     console.log(id,number)
+    console.log(id,number[0])
+    const separatedArray = Array.from(
+        number.split(",")
+    );
+    console.log(separatedArray)
+    const map1 = separatedArray.map((x) => x * 2);
+
+    console.log(map1);
     //selva(to,message)
     //const { id, number, message,mediaPath } = data;
     const client = allsessionsObject[id];
@@ -33,13 +46,13 @@ app.get('/sendMessage', async (req, res) => {
     const chats = await client.getChats();
     //console.log('chats',chats);
     //console.log('data',data);
-    /*const messages = await Promise.all(number.map(async number => {
-        const msg = await client.sendMessage(`${number}@c.us`, message, mediaOptions);
+    const messages = await Promise.all(separatedArray.map(async separatedArray => {
+        const msg = await client.sendMessage(`${separatedArray}@c.us`, message, mediaOptions);
     }))
-        socket.emit('sendMessageSuccess', { message: 'Message sent successfully',msg:messages });
-*/
-    const msg = await client.sendMessage(`${number}@c.us`, message, mediaOptions);
+        //socket.emit('sendMessageSuccess', { message: 'Message sent successfully',msg:messages });
+    //const msg = await client.sendMessage(`${number}@c.us`, message, mediaOptions);
     res.send("msg sent");
+    console.log("msg sent");
     //socket.emit('sendMessageSuccess', { message: 'Message sent successfully',msg:msg });
 
 
@@ -59,7 +72,7 @@ app.get('/sendMessage', async (req, res) => {
 
 mongoose.connect(MONGODB_URI).then(() => {
     console.log("Hello To connnected MONGODB")
-     store = new MongoStore({ mongoose: mongoose });
+    store = new MongoStore({ mongoose: mongoose });
     console.log(store)
     /*const client = new Client({
         authStrategy: new RemoteAuth({
@@ -90,6 +103,20 @@ server.listen(3000, () => {
     console.log("listening port " + port + "\nurl: http://localhost:" + port);
 });*/
 
+
+const minefolder=async(id,socket)=>
+{
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+        console.log('Directory created:', dirPath);
+        socket.emit('ready',{id,message:'client Folder is ready'});
+    }
+    else {
+        console.log("Directory exists!")
+        socket.emit('ready',{id,message:'client Folder is not ready'});
+    }
+};
+
 const allsessionsObject = {};
 
 /* const client = new Client({
@@ -108,10 +135,17 @@ client.on('qr', (qr) => {
 client.on('ready', () => {
     console.log('Client is ready!');
 }); */
+
+
 const createWhatsappSession = async (id,socket) => {
     let client = new Client({
         puppeteer:{
-            headless:true,
+            puppeteer: {
+                dataPath: './wwebjs_auth/session',
+                executablePath:"/snap/bin/chromium/", headless : true,args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox'
+                ],}
         },
         authStrategy: new RemoteAuth(
             {
@@ -141,12 +175,12 @@ const createWhatsappSession = async (id,socket) => {
         allsessionsObject[id] = client;
         socket.emit('ready',{id,message:'client is ready'});
     });
-      client.on('remote_session_saved',()=>{
-         console.log('remote-session saved');
-         socket.emit('remote_session_saved',{
-             message:'remote session saved'
-         });
-     })
+    client.on('remote_session_saved',()=>{
+        console.log('remote-session saved');
+        socket.emit('remote_session_saved',{
+            message:'remote session saved'
+        });
+    })
 
 
     client.initialize();
@@ -188,7 +222,7 @@ io.on('connection', (socket) => {
     socket.on("connected",(data)=>
     {
         console.log("Connnected to the server",data)
-        socket.emit("Hello From the server");
+        socket.emit("message",{message:"Connected To Server"});
     });
     socket.on('createSession', (data) => {
         console.log('creating session for a user', data);
@@ -205,10 +239,10 @@ io.on('connection', (socket) => {
     });
     socket.on('getSession', (data) => {
         console.log('getSession',data);
+        socket.emit("message",{message:"getSession Started"});
         const {id} = data;
         getWhatsappSession(id,socket);
     });
-
 
     socket.on('getAllChats',async (data)=>{
         console.log('getting all chats',data);
@@ -218,6 +252,11 @@ io.on('connection', (socket) => {
         socket.emit('allChats',{chats});
     })
 
+    socket.on('foldercreate', (data) => {
+        console.log('foldercreate',data);
+        const {id} = data;
+        minefolder(id,socket);
+    });
     socket.on('sendMessage', async (data) => {
         console.log('sending message', data);
         const { id, number, message,mediaPath } = data;
